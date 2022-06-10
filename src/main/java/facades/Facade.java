@@ -30,14 +30,12 @@ public class Facade implements Ifacade{
     }
 @Override
     public List<OwnerDTO> getAllOwners(){
-        try {
+
         List<Owner> ownerList=em.createQuery("select o from Owner o",Owner.class).getResultList();
 
         return OwnerDTO.getOwnerDTOs(ownerList);
 
-        }finally {
-            em.close();
-        }
+
 
 
 
@@ -51,7 +49,6 @@ public class Facade implements Ifacade{
     }
     @Override
     public List<BoatDTO> getBoatsByHarbour(String harbour) {
-        List<Boat> boats= new ArrayList<>();
         TypedQuery<Harbour> query= em.createQuery("select b from Harbour b where b.name= :harbour", Harbour.class);
                query.setParameter("harbour",harbour);
             Harbour harbour1 =query.getSingleResult();

@@ -95,6 +95,7 @@ class FacadeTest {
 
     @Test
     void getAllOwners() {
+
         System.out.println("Test for getting all owners");
         int expected = 3;
         int actual = facade.getAllOwners().size();
