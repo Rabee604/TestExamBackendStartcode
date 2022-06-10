@@ -17,7 +17,7 @@ class FacadeTest {
     Facade facade = Facade.getFacade(EMF_Creator.createEntityManagerFactoryForTest());
     static EntityManagerFactory emf;
     static EntityManager em;
-
+    Boat boat1;
     @BeforeEach
     void setUp() {
         emf = EMF_Creator.createEntityManagerFactoryForTest();
@@ -31,7 +31,7 @@ class FacadeTest {
         Role userRole = new Role("user");
         Role adminRole = new Role("admin");
 
-        Boat boat1 = new Boat("Brand1", "Make1", "Boat1", "ImageURL1");
+        boat1 = new Boat("Brand1", "Make1", "Boat1", "ImageURL1");
         Boat boat2 = new Boat("Brand2", "Make2", "Boat2", "ImageURL2");
         Boat boat3 = new Boat("Brand3", "Make3", "Boat3", "ImageURL3");
 
@@ -145,8 +145,8 @@ class FacadeTest {
     void testDeleteBoatById()
     {
         System.out.println("Testing deleteBoatById()");
-        int expected = 3;
-        BoatDTO deletedBoat = facade.deleteBoatByID(1);
+        int expected = 2;
+        BoatDTO deletedBoat = facade.deleteBoatByID(boat1.getId());
         int actual = facade.getAllBoats().size();
         assertEquals(expected, actual);
 
