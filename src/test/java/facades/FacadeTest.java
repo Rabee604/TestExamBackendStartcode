@@ -145,7 +145,7 @@ class FacadeTest {
     void testDeleteBoatById()
     {
         System.out.println("Testing deleteBoatById()");
-        int expected = 2;
+        int expected = 3;
         BoatDTO deletedBoat = facade.deleteBoatByID(1);
         int actual = facade.getAllBoats().size();
         assertEquals(expected, actual);
