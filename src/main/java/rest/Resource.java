@@ -2,7 +2,13 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import dto.BoatDTO;
+import dto.HarbourDTO;
 import dto.OwnerDTO;
+import entities.Boat;
+import entities.Harbour;
 import entities.User;
 import java.util.List;
 import java.util.Set;
@@ -10,12 +16,10 @@ import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import javax.ws.rs.Produces;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
 
+import errorhandling.API_Exception;
 import facades.Facade;
 import utils.EMF_Creator;
 
@@ -103,4 +107,54 @@ public class Resource {
                 .entity(gson.toJson(facade.getOwnersByBoat(boat)))
                 .build();
     }
+
+    @POST
+    @Path("create")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response createBoat(String content) {
+        BoatDTO boatDTO = gson.fromJson(content, BoatDTO.class);
+        return Response
+                .ok()
+                .entity(gson.toJson(facade.create(boatDTO)))
+                .build();
+    }
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("setharbour")
+    public Response setBoatHarbour(String jsonString)throws API_Exception {
+
+        EntityManager em = EMF.createEntityManager();
+
+        String boatName;
+        String harbourName;
+        try{
+            JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
+
+            boatName = json.get("boatName").getAsString();
+            harbourName = json.get("harbourName").getAsString();
+
+        } catch (Exception e) {
+            throw new API_Exception("Malformed JSON Suplied", 400, e);
+        }
+                return Response
+                .ok()
+                .entity(gson.toJson(facade.setBoatHarbour(boatName,harbourName)))
+                .build();
+    }
+
+    @DELETE
+    @Path("/delete/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response deletePersonById(@PathParam("id") Long id)
+    {
+        BoatDTO boatDTO = facade.deleteBoatByID(id);
+        return Response
+                .ok()
+                .entity(gson.toJson(boatDTO))
+                .build();
+    }
+
 }

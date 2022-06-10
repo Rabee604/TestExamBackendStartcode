@@ -1,8 +1,14 @@
 package rest;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import dto.BoatDTO;
+import dto.HarbourDTO;
 import dto.OwnerDTO;
 import entities.*;
+import facades.Facade;
 import org.junit.jupiter.api.*;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
@@ -37,7 +43,7 @@ public class ResourceTest {
     private static Boat boat1,boat2,boat3;
     private static OwnerDTO owner1DTO,owner2DTO,owner3DTO;
     private static BoatDTO boat1DTO,boat2DTO,boat3DTO;
-
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
@@ -191,6 +197,54 @@ public class ResourceTest {
                 .extract().body().jsonPath().getList("", BoatDTO.class);
         assertThat(actualBoatDTOs, containsInAnyOrder(boat2DTO,boat1DTO));
     }
+    @Test
+    void createBoat() {
+        System.out.println("Testing to create a boat");
+
+        Facade facade = Facade.getFacade(emf);
+        Boat boat = new Boat("Brand4","Make4","Boat4","ImageURL4");
+        BoatDTO actualBoatDTO = new BoatDTO(boat);
+        String s = GSON.toJson(actualBoatDTO);
+
+        BoatDTO expectedBoatDTO = given()
+                .contentType("application/json").body(s)
+                .when()
+                .post("/info/create")
+                .then()
+                .extract().body().jsonPath().getObject("", BoatDTO.class);
+
+        assertThat(actualBoatDTO.getName(), equalTo(expectedBoatDTO.getName()));
+    }
+
+    @Test
+    void deleteBoatById()
+    {
+        System.out.println("Testing to delete boat by id");
+        BoatDTO boatDTO = given()
+                .contentType("application/json")
+                .when()
+                .delete("/info/delete/" +  boat3DTO.getId())
+                .then()
+                .extract().body().jsonPath().getObject("", BoatDTO.class);
+
+        assertThat(boatDTO.getName(), equalTo(new BoatDTO(boat3).getName()));
+    }
+
+   /* @Test
+   public void setBoatHarbour() {
+        System.out.println("Testing to set the boat to harbour");
+
+        String body = "{'boatName':'Boat4','harbourName':'Harbour2'}";
+        JsonObject jsonObject = (JsonObject) JsonParser.parseString(body);
+           List <HarbourDTO> actualBoatDTOs = given()
+                .contentType("application/json").body(jsonObject)
+                .when()
+                .post("/info/setharbour")
+                .then()
+                .extract().body().jsonPath().getObject("",HarbourDTO.class);
+
+        assertThat(, containsInAnyOrder();
+    }*/
 
 
 }

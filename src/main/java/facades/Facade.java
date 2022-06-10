@@ -1,6 +1,7 @@
 package facades;
 
 import dto.BoatDTO;
+import dto.HarbourDTO;
 import dto.OwnerDTO;
 import entities.Boat;
 import entities.Harbour;
@@ -62,6 +63,52 @@ public class Facade implements Ifacade{
         query.setParameter("boat",boat);
         Boat boat1 = query.getSingleResult();
         return OwnerDTO.getOwnerDTOs(boat1.getOwnerLists());
+    }
+
+    public BoatDTO create(BoatDTO boatDTO){
+        Boat boat= new Boat(boatDTO.getId(), boatDTO.getBrand(), boatDTO.getMake(), boatDTO.getName(), boatDTO.getImage());
+
+        em.getTransaction().begin();
+        em.persist(boat);
+            em.getTransaction().commit();
+        return new BoatDTO(boat);
+    }
+    public List<BoatDTO> getAllBoats(){
+        List<Boat> boats= em.createQuery("SELECT b from Boat b", Boat.class).getResultList();
+
+
+        return BoatDTO.getBoatDTOs(boats);
+    }
+    @Override
+    public HarbourDTO setBoatHarbour(String boat, String harbour) {
+        TypedQuery<Boat> typedQuery= em.createQuery("select b from Boat b where b.name= :boat", Boat.class);
+        typedQuery.setParameter("boat",boat);
+        Boat boat1 = typedQuery.getSingleResult();
+        TypedQuery<Harbour> query= em.createQuery("select b from Harbour b where b.name= :harbour", Harbour.class);
+        query.setParameter("harbour",harbour);
+        Harbour harbour1 = query.getSingleResult();
+        boat1.setHarbour(harbour1);
+        em.getTransaction().begin();
+        em.merge(boat1);
+        em.getTransaction().commit();
+
+        return new HarbourDTO(harbour1);
+    }
+
+    public BoatDTO deleteBoatByID(long id)  {
+        Boat boat = em.find(Boat.class, id);
+
+            em.getTransaction().begin();
+
+            // removes Boat from owner
+            boat.getOwnerLists().forEach( owner-> {
+                em.remove(owner);
+            });
+
+            em.remove(boat);
+            em.getTransaction().commit();
+
+        return new BoatDTO(boat);
     }
 }
 

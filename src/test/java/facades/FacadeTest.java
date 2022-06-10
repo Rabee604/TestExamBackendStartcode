@@ -1,5 +1,7 @@
 package facades;
 
+import dto.BoatDTO;
+import dto.HarbourDTO;
 import entities.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -117,5 +119,36 @@ class FacadeTest {
         int expected = 2;
         int actual = facade.getOwnersByBoat("boat1").size();
         assertEquals(expected, actual);
+    }
+    @Test
+    void testCreatePerson() {
+        System.out.println("Testing create()");
+        Boat p = new Boat("Brand4", "Make4", "Boat4", "ImageURL4");
+        BoatDTO pd1 = new BoatDTO(p);
+        facade.create(pd1);
+        int expected = 4;
+        int actual = facade.getAllBoats().size();
+        assertEquals(expected, actual);
+    }
+    @Test
+    void setBoatHarbour() {
+            System.out.println("Test for setting a boats harbour");
+
+            int expected = 1;
+            HarbourDTO harbour = facade.setBoatHarbour("Boat3","Harbour2");
+            int actual = facade.getBoatsByHarbour("harbour2").size();
+
+            assertEquals(expected, actual);
+    }
+
+    @Test
+    void testDeleteBoatById()
+    {
+        System.out.println("Testing deleteBoatById()");
+        int expected = 2;
+        BoatDTO deletedBoat = facade.deleteBoatByID(1);
+        int actual = facade.getAllBoats().size();
+        assertEquals(expected, actual);
+
     }
 }

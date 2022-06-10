@@ -1,6 +1,7 @@
 package facades;
 
 import dto.BoatDTO;
+import dto.HarbourDTO;
 import dto.OwnerDTO;
 import entities.Boat;
 import entities.Harbour;
@@ -13,4 +14,7 @@ public interface Ifacade {
     Boat getBoatByName(String name);
     List<BoatDTO> getBoatsByHarbour(String harbour);
     List<OwnerDTO> getOwnersByBoat(String boat);
+    List<BoatDTO> getAllBoats();
+    HarbourDTO setBoatHarbour(String boat, String harbour);
+
 }

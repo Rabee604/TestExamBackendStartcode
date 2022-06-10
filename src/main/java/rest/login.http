@@ -6,3 +6,25 @@ POST https://peternedergaard.xyz/CA2backend/api/login
 ###
 GET http://localhost:8080/devops_starter_war_exploded/api/info/user
 x-access-token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwicm9sZXMiOiJ1c2VyIiwiZXhwIjoxNjQ5MTUyNzM4LCJpYXQiOjE2NDkxNTA5MzgsImlzc3VlciI6InNlbWVzdGVyc3RhcnRjb2RlLWRhdDMiLCJ1c2VybmFtZSI6InVzZXIifQ.I1KrON2rUPj4ZpwDPETNz9khKVUiTn4QIvmejVErVyA
+
+###
+POST http://localhost:8080/sem3ExamBackend_war_exploded/api/info/create
+
+{
+brand:"Brand4",
+make: "Make4",
+name: "Boat4",
+image:"ImageURL4"
+
+
+}
+###
+POST http://localhost:8080/sem3ExamBackend_war_exploded/api/info/setharbour
+
+{
+boatName:"Boat4",
+harbourName: "Harbour2"
+}
+###
+//delete person by id and get the deleted person
+DELETE http://localhost:8080/sem3ExamBackend_war_exploded/api/info/delete/1
