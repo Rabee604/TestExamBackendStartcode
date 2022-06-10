@@ -15,6 +15,7 @@ class FacadeTest {
     Facade facade = Facade.getFacade(EMF_Creator.createEntityManagerFactoryForTest());
     static EntityManagerFactory emf;
     static EntityManager em;
+
     @BeforeEach
     void setUp() {
         emf = EMF_Creator.createEntityManagerFactoryForTest();
@@ -28,23 +29,24 @@ class FacadeTest {
         Role userRole = new Role("user");
         Role adminRole = new Role("admin");
 
-        Boat boat1 = new Boat("Brand1","Make1","Boat1","ImageURL1");
-        Boat boat2 = new Boat("Brand2","Make2","Boat2","ImageURL2");
-        Boat boat3 = new Boat("Brand3","Make3","Boat3","ImageURL3");
+        Boat boat1 = new Boat("Brand1", "Make1", "Boat1", "ImageURL1");
+        Boat boat2 = new Boat("Brand2", "Make2", "Boat2", "ImageURL2");
+        Boat boat3 = new Boat("Brand3", "Make3", "Boat3", "ImageURL3");
 
-        Harbour harbour1 = new Harbour("Harbour1","Address1","20");
-        Harbour harbour2 = new Harbour("Harbour2","Address2","15");
+        Harbour harbour1 = new Harbour("Harbour1", "Address1", "20");
+        Harbour harbour2 = new Harbour("Harbour2", "Address2", "15");
 
-        Owner owner1 = new Owner("Owner1","HomeAddress1","12345678");
-        Owner owner2 = new Owner("Owner2","HomeAddress2","87654321");
-        Owner owner3 = new Owner("Owner3","HomeAddress3","43215678");
+        Owner owner1 = new Owner("Owner1", "HomeAddress1", "12345678");
+        Owner owner2 = new Owner("Owner2", "HomeAddress2", "87654321");
+        Owner owner3 = new Owner("Owner3", "HomeAddress3", "43215678");
 
 
         owner1.addBoat(boat1);
         owner2.addBoat(boat2);
         owner3.addBoat(boat3);
         owner3.addBoat(boat1);
-
+        boat1.setHarbour(harbour1);
+        boat2.setHarbour(harbour1);
 
 
         user.addRole(userRole);
@@ -52,7 +54,7 @@ class FacadeTest {
         both.addRole(userRole);
         both.addRole(adminRole);
 
-        try{
+        try {
             em.getTransaction().begin();
 
             em.createQuery("delete from Boat").executeUpdate();
@@ -86,18 +88,25 @@ class FacadeTest {
     }
 
 
-
     @AfterEach
     void tearDown() {
         emf.close();
     }
 
     @Test
-    void getAllOwners(){
+    void getAllOwners() {
         System.out.println("Test for getting all owners");
         int expected = 3;
         int actual = facade.getAllOwners().size();
-        assertEquals(expected,actual);
+        assertEquals(expected, actual);
 
+    }
+
+    @Test
+    void testGetBoatByHarbour() {
+        System.out.println("Testing BoatByHarbour()");
+        int expected = 2;
+        int actual = facade.getBoatsByHarbour("harbour1").size();
+        assertEquals(expected, actual);
     }
 }

@@ -31,7 +31,8 @@ public class Generate {
         owner2.addBoat(boat2);
         owner3.addBoat(boat3);
         owner3.addBoat(boat1);
-
+        boat1.setHarbour(harbour1);
+        boat2.setHarbour(harbour1);
         em.getTransaction().begin();
 
         Role userRole = new Role("user");

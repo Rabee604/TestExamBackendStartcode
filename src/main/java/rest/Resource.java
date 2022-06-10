@@ -10,6 +10,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.*;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
@@ -83,5 +84,14 @@ public class Resource {
                 .entity(gson.toJson(c))
                 .build();
 
+    }
+    @GET
+    @Path("/harbour/{harbour}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getPersonByHobby(@PathParam("harbour") String harbour) {
+        return Response
+                .ok()
+                .entity(gson.toJson(facade.getBoatsByHarbour(harbour)))
+                .build();
     }
 }

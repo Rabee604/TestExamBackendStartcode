@@ -8,6 +8,8 @@ import entities.Owner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Facade implements Ifacade{
@@ -28,7 +30,6 @@ public class Facade implements Ifacade{
     }
 @Override
     public List<OwnerDTO> getAllOwners(){
-        EntityManager em = emf.createEntityManager();
         try {
         List<Owner> ownerList=em.createQuery("select o from Owner o",Owner.class).getResultList();
 
@@ -41,12 +42,28 @@ public class Facade implements Ifacade{
 
 
     }
+    @Override
+    public Boat getBoatByName(String name){
+        Boat boat = em.createQuery("select b from Boat b where b.name= :name", Boat.class)
+                .setParameter("name", name)
+                .getSingleResult();
+            return boat;
+    }
+    @Override
+    public List<BoatDTO> getBoatsByHarbour(String harbour) {
+        List<Boat> boats= new ArrayList<>();
+        TypedQuery<Harbour> query= em.createQuery("select b from Harbour b where b.name= :harbour", Harbour.class);
+               query.setParameter("harbour",harbour);
+            Harbour harbour1 =query.getSingleResult();
 
-   public List<BoatDTO> getBoatsByHarbour(Harbour harbour){
-        return null;
-   }
+
+        return BoatDTO.getBoatDTOs(harbour1.getBoatList());
+    }
+    @Override
     public List<OwnerDTO> getOwnersByBoat(Boat boat){
-        return null;
+        boat.getOwnerLists();
+
+        return OwnerDTO.getOwnerDTOs(boat.getOwnerLists());
     }
 }
 

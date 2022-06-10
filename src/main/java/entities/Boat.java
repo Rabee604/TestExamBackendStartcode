@@ -26,6 +26,14 @@ public class Boat {
 
     }
 
+    public Harbour getHarbour() {
+        return harbour;
+    }
+
+    public void setHarbour(Harbour harbour) {
+        this.harbour = harbour;
+        harbour.addBoat(this);
+    }
 
     public Boat(Long id, String brand, String make, String name, String image) {
         this.id = id;
