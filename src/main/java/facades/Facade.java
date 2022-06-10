@@ -57,10 +57,11 @@ public class Facade implements Ifacade{
         return BoatDTO.getBoatDTOs(harbour1.getBoatList());
     }
     @Override
-    public List<OwnerDTO> getOwnersByBoat(Boat boat){
-        boat.getOwnerLists();
-
-        return OwnerDTO.getOwnerDTOs(boat.getOwnerLists());
+    public List<OwnerDTO> getOwnersByBoat(String boat){
+        TypedQuery<Boat> query = em.createQuery("select b from Boat b where b.name= :boat", Boat.class);
+        query.setParameter("boat",boat);
+        Boat boat1 = query.getSingleResult();
+        return OwnerDTO.getOwnerDTOs(boat1.getOwnerLists());
     }
 }
 

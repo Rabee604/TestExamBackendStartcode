@@ -88,10 +88,19 @@ public class Resource {
     @GET
     @Path("/harbour/{harbour}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getPersonByHobby(@PathParam("harbour") String harbour) {
+    public Response getBoatByharbour(@PathParam("harbour") String harbour) {
         return Response
                 .ok()
                 .entity(gson.toJson(facade.getBoatsByHarbour(harbour)))
+                .build();
+    }
+    @GET
+    @Path("/boat/{boat}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getOwnerByBoat(@PathParam("boat") String boat) {
+        return Response
+                .ok()
+                .entity(gson.toJson(facade.getOwnersByBoat(boat)))
                 .build();
     }
 }

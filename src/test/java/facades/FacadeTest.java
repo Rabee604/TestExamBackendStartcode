@@ -110,4 +110,12 @@ class FacadeTest {
         int actual = facade.getBoatsByHarbour("harbour1").size();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void testGetOwnerByBoat() {
+        System.out.println("Testing testGetOwnerByBoat");
+        int expected = 2;
+        int actual = facade.getOwnersByBoat("boat1").size();
+        assertEquals(expected, actual);
+    }
 }

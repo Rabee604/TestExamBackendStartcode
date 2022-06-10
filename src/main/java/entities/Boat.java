@@ -3,6 +3,7 @@ package entities;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "boat")
@@ -100,7 +101,21 @@ public class Boat {
         return ownerLists;
     }
 
+
     public void setOwnerLists(List<Owner> ownerLists) {
         this.ownerLists = ownerLists;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Boat boat = (Boat) o;
+        return Objects.equals(brand, boat.brand) && Objects.equals(make, boat.make) && Objects.equals(name, boat.name) && Objects.equals(image, boat.image);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(brand, make, name, image);
     }
 }

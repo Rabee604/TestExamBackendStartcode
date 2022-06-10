@@ -1,5 +1,6 @@
 package rest;
 
+import dto.BoatDTO;
 import dto.OwnerDTO;
 import entities.*;
 import org.junit.jupiter.api.*;
@@ -32,8 +33,11 @@ public class ResourceTest {
     private static HttpServer httpServer;
     private static EntityManagerFactory emf;
     private static Owner owner1,owner2,owner3;
+    private static Harbour harbour1, harbour2;
     private static Boat boat1,boat2,boat3;
     private static OwnerDTO owner1DTO,owner2DTO,owner3DTO;
+    private static BoatDTO boat1DTO,boat2DTO,boat3DTO;
+
 
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
@@ -79,8 +83,8 @@ public class ResourceTest {
         boat2 = new Boat("Brand2","Make2","Boat2","ImageURL2");
         boat3 = new Boat("Brand3","Make3","Boat3","ImageURL3");
 
-        Harbour harbour1 = new Harbour("Harbour1","Address1","20");
-        Harbour harbour2 = new Harbour("Harbour2","Address2","15");
+        harbour1 = new Harbour("Harbour1","Address1","20");
+        harbour2 = new Harbour("Harbour2","Address2","15");
 
         owner1 = new Owner("Owner1","HomeAddress1","12345678");
         owner2 = new Owner("Owner2","HomeAddress2","87654321");
@@ -91,7 +95,8 @@ public class ResourceTest {
         owner2.addBoat(boat2);
         owner3.addBoat(boat3);
         owner3.addBoat(boat1);
-
+        boat1.setHarbour(harbour1);
+        boat2.setHarbour(harbour1);
 
 
 
@@ -133,6 +138,9 @@ public class ResourceTest {
         owner1DTO= new OwnerDTO(owner1);
         owner2DTO= new OwnerDTO(owner2);
         owner3DTO= new OwnerDTO(owner3);
+        boat1DTO= new BoatDTO(boat1);
+        boat2DTO= new BoatDTO(boat2);
+        boat3DTO= new BoatDTO(boat3);
 
     }
 
@@ -160,6 +168,28 @@ public class ResourceTest {
                 .extract().body().jsonPath().getList("",OwnerDTO.class);
 
         assertThat(actualOwnerListDTO, containsInAnyOrder(owner1DTO,owner2DTO,owner3DTO));
+    }
+    @Test
+    void getOwnerByBoat() {
+        System.out.println("Testing to get getOwnerByBoat");
+        List<OwnerDTO> actualPersonsDTOs = given()
+                .contentType("application/json")
+                .when()
+                .get("/info/boat/" + boat1.getName())
+                .then()
+                .extract().body().jsonPath().getList("", OwnerDTO.class);
+        assertThat(actualPersonsDTOs, containsInAnyOrder( owner1DTO, owner3DTO));
+    }
+    @Test
+    void getBoatByHarbour() {
+        System.out.println("Testing to get getBoatByHarbour");
+        List<BoatDTO> actualBoatDTOs = given()
+                .contentType("application/json")
+                .when()
+                .get("/info/harbour/"+ harbour1.getName())
+                .then()
+                .extract().body().jsonPath().getList("", BoatDTO.class);
+        assertThat(actualBoatDTOs, containsInAnyOrder(boat2DTO,boat1DTO));
     }
 
 

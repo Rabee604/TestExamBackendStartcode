@@ -12,5 +12,5 @@ public interface Ifacade {
     List<OwnerDTO> getAllOwners();
     Boat getBoatByName(String name);
     List<BoatDTO> getBoatsByHarbour(String harbour);
-     List<OwnerDTO> getOwnersByBoat(Boat boat);
+    List<OwnerDTO> getOwnersByBoat(String boat);
 }

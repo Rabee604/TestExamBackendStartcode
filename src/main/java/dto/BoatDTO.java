@@ -3,10 +3,7 @@ package dto;
 import entities.Boat;
 import entities.Owner;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class BoatDTO {
 
@@ -79,5 +76,18 @@ public class BoatDTO {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BoatDTO boatDTO = (BoatDTO) o;
+        return Objects.equals(brand, boatDTO.brand) && Objects.equals(make, boatDTO.make) && Objects.equals(name, boatDTO.name) && Objects.equals(image, boatDTO.image);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(brand, make, name, image);
     }
 }
