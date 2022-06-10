@@ -2,10 +2,7 @@ package dto;
 
 import entities.Owner;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class OwnerDTO {
     private Long id;
@@ -71,5 +68,18 @@ public class OwnerDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OwnerDTO ownerDTO = (OwnerDTO) o;
+        return Objects.equals(name, ownerDTO.name) && Objects.equals(address, ownerDTO.address) && Objects.equals(phone, ownerDTO.phone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, address, phone);
     }
 }
