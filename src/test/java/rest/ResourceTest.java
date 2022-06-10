@@ -150,7 +150,7 @@ public class ResourceTest {
 
     @Test
     public void getAllOwners() {
-        System.out.println("Testing to get all owners");
+        System.out.println("Testing all owners");
 
         List<OwnerDTO> actualOwnerListDTO = given()
                 .contentType("application/json")
